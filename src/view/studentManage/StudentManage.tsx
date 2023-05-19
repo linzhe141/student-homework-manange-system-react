@@ -46,6 +46,7 @@ export function StudentManage() {
   // 用于编辑时的id
   const [currentId, setCurrentId] = useState(0);
   const [title, setTitle] = useState<DialogType>('新增');
+  const [type, setType] = useState<'add' | 'edit'>('add');
   const [formValue, setFormValue] = useState(defaultFormValue());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -59,10 +60,12 @@ export function StudentManage() {
     setIsModalOpen(true);
     if (type === 'add') {
       setTitle('新增');
+      setType('add');
       setFormValue(defaultFormValue());
     } else {
       //
       setTitle('编辑');
+      setType('edit');
       setCurrentId(id!);
       const { data } = await getStudent(id!);
       setFormValue({
@@ -120,7 +123,7 @@ export function StudentManage() {
         destroyOnClose
         onCancel={() => setIsModalOpen(false)}
       >
-        <AddEditForm form={addEditform} formValue={formValue} />
+        <AddEditForm form={addEditform} formValue={formValue} type={type} />
       </Modal>
     </>
   );
