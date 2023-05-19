@@ -1,11 +1,13 @@
 import { StudentPageListItem } from '@/types';
 import { DeleteOutlined, FormOutlined } from '@ant-design/icons';
+import { Popconfirm } from 'antd';
 
 type Props = {
   list: StudentPageListItem[];
   onOpenDialog: (type: 'add' | 'edit', id: number) => void;
+  onDelete: (id: number) => void;
 };
-export const List: React.FC<Props> = ({ list, onOpenDialog }) => {
+export const List: React.FC<Props> = ({ list, onOpenDialog, onDelete }) => {
   return (
     <div className=" pt-2">
       {list.map((item) => (
@@ -22,7 +24,15 @@ export const List: React.FC<Props> = ({ list, onOpenDialog }) => {
               className=" cursor-pointer"
               onClick={() => onOpenDialog('edit', item.id)}
             />
-            <DeleteOutlined className=" ml-2 cursor-pointer" />
+            <Popconfirm
+              title="删除学生"
+              description="是否确定删除该学生，同时也会删去对应的账户?"
+              onConfirm={() => onDelete(item.id)}
+              okText="确定"
+              cancelText="取消"
+            >
+              <DeleteOutlined className=" ml-2 cursor-pointer" />
+            </Popconfirm>
           </div>
         </div>
       ))}

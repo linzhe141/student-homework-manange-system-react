@@ -4,11 +4,12 @@ import {
   createStudent,
   getStudent,
   updateStudent,
+  deleteStudent,
 } from '../../api/index';
 import { SearchForm } from './form/SearchForm';
 import { Button, Form, Modal, message as $message } from 'antd';
 import { DeleteOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
-import { AddEditForm, getFormValue } from './form/AddEditForm';
+import { AddEditForm, defaultFormValue } from './form/AddEditForm';
 import {
   DialogType,
   StudentFormValue,
@@ -20,22 +21,23 @@ import { List } from './list/List';
 export function StudentManage() {
   // 搜索表单
   const [searchform] = Form.useForm();
+  const defaultSearchFormValue = {
+    studentName: '',
+    studentNum: '',
+  };
   const [searchFormValue, setSearchFormValue] =
-    useState<StudentSearchFormValue>({
-      studentName: '',
-      studentNum: '',
-    });
+    useState<StudentSearchFormValue>(defaultSearchFormValue);
   function onSubmit(value: StudentSearchFormValue) {
     setSearchFormValue(value);
-    getList();
+    getList(value);
   }
   // 分页
   const [list, setList] = useState([] as StudentPageListItem[]);
 
   useEffect(() => {
-    getList();
+    getList(defaultSearchFormValue);
   }, []);
-  async function getList() {
+  async function getList(searchFormValue: any) {
     const data = await getStudentList(searchFormValue);
     setList(data.data);
   }
@@ -44,15 +46,20 @@ export function StudentManage() {
   // 用于编辑时的id
   const [currentId, setCurrentId] = useState(0);
   const [title, setTitle] = useState<DialogType>('新增');
-  const [formValue, setFormValue] = useState(getFormValue());
+  const [formValue, setFormValue] = useState(defaultFormValue());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [addEditform] = Form.useForm();
+  async function onDelete(id: number) {
+    const { message } = await deleteStudent(id);
+    $message.success(message);
+    getList(searchFormValue);
+  }
   const onOpenDialog = async (type: 'add' | 'edit', id?: number) => {
     setIsModalOpen(true);
     if (type === 'add') {
       setTitle('新增');
-      setFormValue(getFormValue());
+      setFormValue(defaultFormValue());
     } else {
       //
       setTitle('编辑');
@@ -81,7 +88,7 @@ export function StudentManage() {
           success = data.success;
         }
         if (success) {
-          getList();
+          getList(searchFormValue);
           setIsModalOpen(false);
           $message.open({ type: 'success', content: message });
         }
@@ -104,7 +111,7 @@ export function StudentManage() {
         </Button>
       </div>
       <div>
-        <List list={list} onOpenDialog={onOpenDialog} />
+        <List list={list} onOpenDialog={onOpenDialog} onDelete={onDelete} />
       </div>
       <Modal
         title={title}

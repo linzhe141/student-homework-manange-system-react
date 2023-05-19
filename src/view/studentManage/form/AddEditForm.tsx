@@ -7,7 +7,7 @@ type Props = {
   form: FormInstance;
   formValue: StudentFormValue;
 };
-export const getFormValue: () => StudentFormValue = () => ({
+export const defaultFormValue: () => StudentFormValue = () => ({
   studentNum: '',
   studentName: '',
 });
@@ -20,7 +20,7 @@ export const AddEditForm: React.FC<Props> = ({ form, formValue }) => {
     <Form
       name="addEdit"
       form={form}
-      initialValues={getFormValue()}
+      initialValues={defaultFormValue()}
       preserve={false}
     >
       <Form.Item
