@@ -1,27 +1,34 @@
 import { login } from '../api/index';
-import { message } from 'antd';
+import { message as $message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalStore } from '@/store/store';
 import { LoginFromValue } from '@/types';
 
 export function useUser() {
   const navigate = useNavigate();
-  const [setToken, setUserName, reset] = useGlobalStore((state) => [
-    state.setToken,
-    state.setUserName,
-    state.reset,
-  ]);
+  const [setToken, setUserName, setUserInfo, reset] = useGlobalStore(
+    (state) => [
+      state.setToken,
+      state.setUserName,
+      state.setUserInfo,
+      state.reset,
+    ],
+  );
   const onLogin = async (formValue: LoginFromValue) => {
-    const data = await login(formValue);
-    message.open({ type: 'success', content: data.message });
-    setToken(`Bearer ${data.data.accessToken}`);
+    const {
+      message,
+      data: { accessToken, userInfo },
+    } = await login({ ...formValue, type: 2 });
+    $message.open({ type: 'success', content: message });
+    setToken(`Bearer ${accessToken}`);
     setUserName(formValue.username);
+    setUserInfo(userInfo);
     navigate('/');
   };
   const onLogout = () => {
     reset();
     navigate('/login');
-    message.success('已退出');
+    $message.success('已退出');
   };
   return {
     onLogin,

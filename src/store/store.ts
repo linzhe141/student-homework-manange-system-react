@@ -5,16 +5,19 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 type State = {
   token: string;
   userName: string;
+  userInfo: any;
 };
 
 type Actions = {
   setToken: (token: string) => void;
   setUserName: (userName: string) => void;
+  setUserInfo: (userInfo: any) => void;
   reset: () => void;
 };
 const initState: State = {
   token: '',
   userName: '',
+  userInfo: {},
 };
 // state immuatable
 // ts写法多一对括号，柯里化
@@ -25,6 +28,7 @@ export const useGlobalStore = create<State & Actions>()(
       ...initState,
       setToken: (token) => set({ token }),
       setUserName: (userName) => set({ userName }),
+      setUserInfo: (userInfo) => set({ userInfo }),
       reset: () => {
         set(initState);
       },
