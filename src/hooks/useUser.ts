@@ -21,6 +21,7 @@ export function useUser() {
   const onLogout = () => {
     reset();
     navigate('/login');
+    message.success('已退出');
   };
   return {
     onLogin,

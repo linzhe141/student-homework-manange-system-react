@@ -12,7 +12,7 @@ export const SearchForm: React.FC<Props<StudentSearchFormValue>> = ({
 }) => {
   return (
     <div className="rounded bg-gray-200 p-3">
-      <Form form={searchform} className="flex gap-2" onFinish={onSubmit}>
+      <Form form={searchform} className="flex gap-2" autoComplete='off' onFinish={onSubmit}>
         <Form.Item label="学号" name="studentNum">
           <Input />
         </Form.Item>

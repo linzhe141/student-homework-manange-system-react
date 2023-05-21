@@ -19,7 +19,7 @@ export const AddEditForm: React.FC<Props> = ({ form, formValue, type }) => {
   }, [form, formValue]);
   return (
     <Form
-      name="addEdit"
+      autoComplete="off"
       form={form}
       initialValues={defaultFormValue()}
       preserve={false}

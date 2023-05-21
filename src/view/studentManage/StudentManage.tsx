@@ -7,8 +7,8 @@ import {
   deleteStudent,
 } from '../../api/index';
 import { SearchForm } from './form/SearchForm';
-import { Button, Form, Modal, message as $message } from 'antd';
-import { DeleteOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Modal, message as $message, Pagination } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { AddEditForm, defaultFormValue } from './form/AddEditForm';
 import {
   DialogType,
@@ -29,17 +29,29 @@ export function StudentManage() {
     useState<StudentSearchFormValue>(defaultSearchFormValue);
   function onSubmit(value: StudentSearchFormValue) {
     setSearchFormValue(value);
-    getList(value);
+    setCurrentPage(1);
+    getList({ ...value, currentPage: currentPage, pageSize: 12 });
   }
   // 分页
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [list, setList] = useState([] as StudentPageListItem[]);
+  function onPageChange(page: number) {
+    setCurrentPage(page);
+    getList({ ...searchFormValue, currentPage: page, pageSize: 12 });
+  }
 
   useEffect(() => {
-    getList(defaultSearchFormValue);
+    getList({
+      ...defaultSearchFormValue,
+      currentPage: currentPage,
+      pageSize: 12,
+    });
   }, []);
   async function getList(searchFormValue: any) {
     const data = await getStudentList(searchFormValue);
-    setList(data.data);
+    setList(data.data.data);
+    setTotal(data.data.total);
   }
 
   // 弹框
@@ -91,7 +103,7 @@ export function StudentManage() {
           success = data.success;
         }
         if (success) {
-          getList(searchFormValue);
+          getList({ ...searchFormValue, currentPage: 1, pageSize: 12 });
           setIsModalOpen(false);
           $message.open({ type: 'success', content: message });
         }
@@ -113,8 +125,14 @@ export function StudentManage() {
           新增
         </Button>
       </div>
-      <div>
+      <div className=" mt-2 rounded p-2" style={{ border: '1px solid #ccc' }}>
         <List list={list} onOpenDialog={onOpenDialog} onDelete={onDelete} />
+        <Pagination
+          current={currentPage}
+          onChange={onPageChange}
+          className=" mt-2"
+          total={total}
+        />
       </div>
       <Modal
         title={title}
