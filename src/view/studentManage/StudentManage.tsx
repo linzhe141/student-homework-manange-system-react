@@ -107,7 +107,7 @@ export function StudentManage() {
   return (
     <>
       <SearchForm onSubmit={onSubmit} searchform={searchform} />
-      <div className=" mt-3 rounded bg-gray-200 p-3">
+      <div className=" mt-3 rounded bg-white p-3">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -116,7 +116,7 @@ export function StudentManage() {
           新增
         </Button>
       </div>
-      <div className=" mt-2 rounded p-2" style={{ border: '1px solid #ccc' }}>
+      <div className=" mt-2 rounded bg-white p-2">
         <List list={list} onOpenDialog={onOpenDialog} onDelete={onDelete} />
         <Pagination
           current={currentPage}
