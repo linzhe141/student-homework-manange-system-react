@@ -2,9 +2,10 @@ import { Form, Input } from 'antd';
 import type { FormInstance } from 'antd';
 import { StudentFormValue } from '../../../types/index';
 import { useEffect } from 'react';
+import { DialogType } from '@/enum/index';
 
 type Props = {
-  type: 'add' | 'edit';
+  type: DialogType;
   form: FormInstance;
   formValue: StudentFormValue;
 };
@@ -26,7 +27,7 @@ export const AddEditForm: React.FC<Props> = ({ form, formValue, type }) => {
     >
       <Form.Item
         label="学号"
-        hidden={type === 'edit'}
+        hidden={type === DialogType.EDIT}
         name="studentNum"
         rules={[{ required: true, message: '请输入学号!' }]}
       >

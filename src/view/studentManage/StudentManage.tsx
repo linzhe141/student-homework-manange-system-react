@@ -11,12 +11,12 @@ import { Button, Form, Modal, message as $message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { AddEditForm, defaultFormValue } from './form/AddEditForm';
 import {
-  DialogType,
   StudentFormValue,
   StudentPageListItem,
   StudentSearchFormValue,
 } from '@/types';
 import { List } from './list/List';
+import { DialogType } from '@/enum';
 
 export function StudentManage() {
   // 搜索表单
@@ -57,8 +57,7 @@ export function StudentManage() {
   // 弹框
   // 用于编辑时的id
   const [currentId, setCurrentId] = useState(0);
-  const [title, setTitle] = useState<DialogType>('新增');
-  const [type, setType] = useState<'add' | 'edit'>('add');
+  const [type, setType] = useState<DialogType>(DialogType.ADD);
   const [formValue, setFormValue] = useState(defaultFormValue());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -68,16 +67,13 @@ export function StudentManage() {
     $message.success(message);
     getList(searchFormValue);
   }
-  const onOpenDialog = async (type: 'add' | 'edit', id?: number) => {
+  const onOpenDialog = async (type: DialogType, id?: number) => {
     setIsModalOpen(true);
-    if (type === 'add') {
-      setTitle('新增');
-      setType('add');
+    if (type === DialogType.ADD) {
+      setType(DialogType.ADD);
       setFormValue(defaultFormValue());
     } else {
-      //
-      setTitle('编辑');
-      setType('edit');
+      setType(DialogType.EDIT);
       setCurrentId(id!);
       const { data } = await getStudent(id!);
       setFormValue({
@@ -92,21 +88,16 @@ export function StudentManage() {
       .validateFields()
       .then(async (value: StudentFormValue) => {
         let message = '';
-        let success = false;
-        if (title === '新增') {
+        if (type === DialogType.ADD) {
           const data = await createStudent(value);
           message = data.message;
-          success = data.success;
         } else {
           const data = await updateStudent(currentId, value);
           message = data.message;
-          success = data.success;
         }
-        if (success) {
-          getList({ ...searchFormValue, currentPage: 1, pageSize: 12 });
-          setIsModalOpen(false);
-          $message.open({ type: 'success', content: message });
-        }
+        getList({ ...searchFormValue, currentPage: 1, pageSize: 12 });
+        setIsModalOpen(false);
+        $message.open({ type: 'success', content: message });
       })
       .catch(() => {
         console.log('err');
@@ -120,7 +111,7 @@ export function StudentManage() {
         <Button
           type="primary"
           icon={<PlusOutlined />}
-          onClick={() => onOpenDialog('add')}
+          onClick={() => onOpenDialog(DialogType.ADD)}
         >
           新增
         </Button>
@@ -135,7 +126,7 @@ export function StudentManage() {
         />
       </div>
       <Modal
-        title={title}
+        title={type}
         open={isModalOpen}
         onOk={onOkHandle}
         destroyOnClose

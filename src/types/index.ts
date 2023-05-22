@@ -4,8 +4,6 @@ export type StudentFormValue = {
   studentNum: string;
 };
 
-export type DialogType = '新增' | '编辑';
-
 export type StudentPageListItem = {
   id: number;
   studentNum: string;

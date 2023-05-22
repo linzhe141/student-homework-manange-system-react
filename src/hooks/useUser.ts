@@ -18,7 +18,7 @@ export function useUser() {
     const {
       message,
       data: { accessToken, userInfo },
-    } = await login({ ...formValue, type: 2 });
+    } = await login({ ...formValue, type: 1 }); // 默认后台管理员登录
     $message.open({ type: 'success', content: message });
     setToken(`Bearer ${accessToken}`);
     setUserName(formValue.username);
