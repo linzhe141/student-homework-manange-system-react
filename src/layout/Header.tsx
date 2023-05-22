@@ -1,11 +1,11 @@
 import { Button } from 'antd';
 import { PoweroffOutlined } from '@ant-design/icons';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import logo from '@/assets/img/logo.png';
 import { useGlobalStore } from '../store/store';
 import { UserType } from '@/enum';
 export function Header() {
-  const { onLogout } = useUser();
+  const { onLogout } = useAuth();
   const [userName, userInfo] = useGlobalStore((state) => [
     state.userName,
     state.userInfo,

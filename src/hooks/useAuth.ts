@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGlobalStore } from '@/store/store';
 import { LoginFromValue } from '@/types';
 
-export function useUser() {
+export function useAuth() {
   const navigate = useNavigate();
   const [setToken, setUserName, setUserInfo, reset] = useGlobalStore(
     (state) => [

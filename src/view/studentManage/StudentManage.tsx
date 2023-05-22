@@ -5,7 +5,7 @@ import {
   getStudent,
   updateStudent,
   deleteStudent,
-} from '../../api/index';
+} from '@/api/index';
 import { SearchForm } from './form/SearchForm';
 import { Button, Form, Modal, message as $message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';

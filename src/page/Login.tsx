@@ -1,9 +1,9 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react'; // Form的一部分输入值类型定义 或者 （名称/值
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import logo from '@/assets/img/logo.png';
 export const Login: React.FC = () => {
-  const { onLogin } = useUser();
+  const { onLogin } = useAuth();
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <img src={logo} alt="logo" className=" w-1/3" />
