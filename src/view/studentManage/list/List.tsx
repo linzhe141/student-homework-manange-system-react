@@ -14,11 +14,11 @@ export const List: React.FC<Props> = ({ list, onOpenDialog, onDelete }) => {
     <>
       {list.length > 0 ? (
         <>
-          <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
             {list.map((item) => (
               <div
                 key={item.id}
-                className=" flex  place-content-between items-center rounded bg-orange-200 p-2"
+                className=" flex place-content-between items-center rounded bg-vuejs-200 p-2 text-white hover:bg-vuejs-300"
               >
                 <div>
                   <div>学号：{item.studentNum}</div>

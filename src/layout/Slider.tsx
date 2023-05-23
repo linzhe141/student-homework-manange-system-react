@@ -9,7 +9,6 @@ export default function Slider() {
   const navigate = useNavigate();
   const [current, setCurrent] = useState('');
   const menuItems = getMenuItems();
-  console.log('x---------->', menuItems);
   const onClick: MenuProps['onClick'] = (e) => {
     setCurrent(e.key);
     navigate(e.key);

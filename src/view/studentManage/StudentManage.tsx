@@ -9,7 +9,7 @@ import {
 import { SearchForm } from './form/SearchForm';
 import { Button, Form, Modal, message as $message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { AddEditForm, defaultFormValue } from './form/AddEditForm';
+import { AddEditForm, getDefaultFormValue } from './form/AddEditForm';
 import {
   StudentFormValue,
   StudentPageListItem,
@@ -58,7 +58,7 @@ export function StudentManage() {
   // 用于编辑时的id
   const [currentId, setCurrentId] = useState(0);
   const [type, setType] = useState<DialogType>(DialogType.ADD);
-  const [formValue, setFormValue] = useState(defaultFormValue());
+  const [formValue, setFormValue] = useState(getDefaultFormValue());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [addEditform] = Form.useForm();
@@ -71,7 +71,7 @@ export function StudentManage() {
     setIsModalOpen(true);
     if (type === DialogType.ADD) {
       setType(DialogType.ADD);
-      setFormValue(defaultFormValue());
+      setFormValue(getDefaultFormValue());
     } else {
       setType(DialogType.EDIT);
       setCurrentId(id!);
@@ -107,7 +107,7 @@ export function StudentManage() {
   return (
     <>
       <SearchForm onSubmit={onSubmit} searchform={searchform} />
-      <div className=" mt-3 rounded bg-white p-3">
+      <div className=" mt-2 rounded bg-white p-2">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -122,6 +122,7 @@ export function StudentManage() {
           current={currentPage}
           onChange={onPageChange}
           className=" mt-2"
+          pageSize={12}
           total={total}
         />
       </div>

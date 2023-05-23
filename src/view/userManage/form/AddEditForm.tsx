@@ -1,19 +1,19 @@
 import { Form, Input } from 'antd';
 import type { FormInstance } from 'antd';
-import { StudentFormValue } from '../../../types/index';
+import { UserFormValue } from '../../../types/index';
 import { useEffect } from 'react';
 import { DialogType } from '@/enum/index';
 
 type Props = {
   type: DialogType;
   form: FormInstance;
-  formValue: StudentFormValue;
+  formValue: UserFormValue;
 };
-export const getDefaultFormValue: () => StudentFormValue = () => ({
-  studentNum: '',
-  studentName: '',
+export const getDefaultFormValue: () => UserFormValue = () => ({
+  username: '',
+  password: '',
 });
-export const AddEditForm: React.FC<Props> = ({ form, formValue, type }) => {
+export const AddEditForm: React.FC<Props> = ({ form, formValue }) => {
   useEffect(() => {
     form.resetFields();
     form.setFieldsValue(formValue);
@@ -21,22 +21,22 @@ export const AddEditForm: React.FC<Props> = ({ form, formValue, type }) => {
   return (
     <Form
       autoComplete="off"
+      labelCol={{ span: 4 }}
       form={form}
       initialValues={getDefaultFormValue()}
       preserve={false}
     >
       <Form.Item
-        label="学号"
-        hidden={type === DialogType.EDIT}
-        name="studentNum"
-        rules={[{ required: true, message: '请输入学号!' }]}
+        label="用户名"
+        name="username"
+        rules={[{ required: true, message: '请输入用户名!' }]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        label="姓名"
-        name="studentName"
-        rules={[{ required: true, message: '请输入姓名!' }]}
+        label="密码"
+        name="password"
+        rules={[{ required: true, message: '请输入密码!' }]}
       >
         <Input />
       </Form.Item>

@@ -42,6 +42,7 @@ request.interceptors.response.use(
       // TODO
       window.location.href = '/login';
     }
+    // ?这里抛出错误，就不会进入业务代码了
     return Promise.reject(error);
   },
 );

@@ -1,10 +1,11 @@
-import { Layout } from '@/layout/Layout';
 import { Content } from '@/layout/Content';
+import EmptyView from '@/layout/EmptyView';
+import { Layout } from '@/layout/Layout';
 import { Login } from '@/page/Login';
 import { NotFound } from '@/view/404';
 import { StudentManage } from '@/view/studentManage/StudentManage';
 import UserManage from '@/view/userManage/UserManage';
-import { useRoutes, RouteObject, Navigate, Outlet } from 'react-router-dom';
+import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 type RouteMeta = {
   label: string;
   key: string;
@@ -59,7 +60,7 @@ export const menuRoutes: any = [
       label: 'test2',
       key: '/test2',
     },
-    element: <Outlet />,
+    element: <EmptyView />,
     children: [
       {
         path: '/test2/test3',
@@ -101,28 +102,13 @@ const rootRoutes = [...staticRoutes, ...authRotes, ...errorRotues];
 export function Router() {
   return useRoutes(rootRoutes);
 }
-// export function getMenuItems(data = menuRoutes, result = [] as any) {
-//   const meunItem = {
-//     key: '',
-//     label: '',
-//     children: [],
-//   };
-//   data.forEach((item: any) => {
-//     meunItem.key = item.meta.key;
-//     meunItem.label = item.meta.label;
-//     result.push(meunItem);
-//     if (item.children?.length) {
-//       meunItem.children = getMenuItems(item.children, result);
-//     }
-//   });
-//   return result;
-// }
+
 export function getMenuItems() {
   const result: any = [];
   menuRoutes.forEach((menuRoute: any) => {
-    result.push(getMenuItem(menuRoute));
+    result.push(setMenuItem(menuRoute));
   });
-  function getMenuItem(data: any, pData: any = null) {
+  function setMenuItem(data: any, pData: any = null) {
     const menuItem: any = {
       key: data.meta.key,
       label: data.meta.label,
@@ -134,7 +120,7 @@ export function getMenuItems() {
     if (data.children?.length) {
       menuItem.children = [];
       data.children.forEach((el: any) => {
-        getMenuItem(el, menuItem);
+        setMenuItem(el, menuItem);
       });
     }
     return menuItem;
