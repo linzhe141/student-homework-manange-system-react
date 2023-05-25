@@ -5,6 +5,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  updateAvatar,
 } from '@/api/index';
 import { SearchForm } from './form/SearchForm';
 import {
@@ -16,11 +17,17 @@ import {
   Table,
   Popconfirm,
 } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  IdcardOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 import { AddEditForm, getDefaultFormValue } from './form/AddEditForm';
 import { UserFormValue, UserPageListItem, UserSearchFormValue } from '@/types';
 import { DialogType, UserType } from '@/enum';
 import { USER_TYPE } from '@/constant';
+import ImageView from '@/component/ImageView';
+import UplodAvatar from './UploadAvatar';
 
 export default function UserManage() {
   // 搜索表单
@@ -110,6 +117,22 @@ export default function UserManage() {
       });
   };
 
+  // 头像弹框
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [fileId, setFileId] = useState(0);
+  const onIdChangeHandle = (id: number) => {
+    setFileId(id);
+  };
+  const onOkAvatarHandle = async () => {
+    if (fileId === 0) {
+      return $message.error('请上传头像');
+    } else {
+      const { message } = await updateAvatar(currentId, { avatarId: fileId });
+      $message.success(message);
+      getList({ ...searchFormValue, currentPage: 1, pageSize: 12 });
+      setIsAvatarModalOpen(false);
+    }
+  };
   return (
     <>
       <SearchForm onSubmit={onSubmit} searchform={searchform} />
@@ -145,32 +168,62 @@ export default function UserManage() {
               },
             },
             {
+              title: '头像',
+              dataIndex: 'avatarImg',
+              key: 'avatarImg',
+              render(_, record: any) {
+                return (
+                  <ImageView
+                    width="50px"
+                    src={record.avatarImg}
+                    noData={<div>暂未设置</div>}
+                  />
+                );
+              },
+            },
+            {
               title: '操作',
               dataIndex: 'operate',
               key: 'operate',
               render(_, record: any) {
                 return (
-                  <Popconfirm
-                    title="删除用户"
-                    description={
-                      <div>
-                        {record.type === UserType.STUDENT &&
-                          '该用户绑定了学生，若删除同时也会删除对应学生，'}
-                        <br />
-                        是否确定删除该账户?
-                      </div>
-                    }
-                    onConfirm={() => onDelete(record.id)}
-                    okText="确定"
-                    cancelText="取消"
-                  >
-                    <Button
-                      danger
-                      icon={<DeleteOutlined className=" ml-2 cursor-pointer" />}
+                  <div>
+                    <Popconfirm
+                      title="删除用户"
+                      description={
+                        <div>
+                          {record.type === UserType.STUDENT &&
+                            '该用户绑定了学生，若删除同时也会删除对应学生，'}
+                          <br />
+                          是否确定删除该账户?
+                        </div>
+                      }
+                      onConfirm={() => onDelete(record.id)}
+                      okText="确定"
+                      cancelText="取消"
                     >
-                      删除
+                      <Button
+                        size="small"
+                        danger
+                        icon={
+                          <DeleteOutlined className=" ml-2 cursor-pointer" />
+                        }
+                      >
+                        删除
+                      </Button>
+                    </Popconfirm>
+                    <Button
+                      className=" ml-4"
+                      size="small"
+                      onClick={() => {
+                        setCurrentId(record.id);
+                        setIsAvatarModalOpen(true);
+                      }}
+                      icon={<IdcardOutlined />}
+                    >
+                      设置头像
                     </Button>
-                  </Popconfirm>
+                  </div>
                 );
               },
             },
@@ -194,6 +247,15 @@ export default function UserManage() {
         onCancel={() => setIsModalOpen(false)}
       >
         <AddEditForm form={addEditform} formValue={formValue} type={type} />
+      </Modal>
+      <Modal
+        title="设置头像"
+        open={isAvatarModalOpen}
+        onOk={onOkAvatarHandle}
+        destroyOnClose
+        onCancel={() => setIsAvatarModalOpen(false)}
+      >
+        <UplodAvatar onIdChangeHandle={onIdChangeHandle} />
       </Modal>
     </>
   );

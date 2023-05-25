@@ -42,3 +42,10 @@ export function updateUser<T>(id: number, data: T): Promise<IResponse> {
 export function deleteUser(id: number): Promise<IResponse> {
   return request.delete('user/' + id);
 }
+
+export function updateAvatar(
+  id: number,
+  data: { avatarId: number },
+): Promise<IResponse> {
+  return request.patch(`user/${id}/updateAvatar`, data);
+}
