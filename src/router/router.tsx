@@ -2,7 +2,7 @@ import { Content } from '@/layout/Content';
 import EmptyView from '@/layout/EmptyView';
 import { Layout } from '@/layout/Layout';
 import { Login } from '@/page/Login';
-import { NotFound } from '@/view/404';
+import { NotFound } from '@/page/404';
 import { StudentManage } from '@/view/studentManage/StudentManage';
 import UserManage from '@/view/userManage/UserManage';
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
